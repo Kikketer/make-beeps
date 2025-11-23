@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Converter</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #2196f3;
+    }
+    
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+    
+    .test-result.pass {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .test-result.fail {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Converter Test</h1>
+  <div id="results"></div>
+  
+  <script src="converter.js"></script>
+  <script>
+    const resultsDiv = document.getElementById('results');
+    
+    function addResult(name, passed, message) {
+      const div = document.createElement('div');
+      div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+      div.innerHTML = `<strong>${passed ? '✓' : '✗'} ${name}</strong><br>${message}`;
+      resultsDiv.appendChild(div);
+    }
+    
+    // Test 1: Basic conversion
+    try {
+      const testSong = {
+        format: "BeepBox",
+        version: 9,
+        scale: "major",
+        key: "C",
+        introBars: 0,
+        loopBars: 1,
+        beatsPerBar: 4,
+        ticksPerBeat: 8,
+        beatsPerMinute: 120,
+        channels: [
+          {
+            type: "pitch",
+            instruments: [{}],
+            patterns: [
+              {
+                notes: [
+                  {
+                    pitches: [60],
+                    points: [{tick: 0, pitchBend: 0, volume: 3}, {tick: 4, pitchBend: 0, volume: 3}]
+                  }
+                ]
+              }
+            ],
+            sequence: [1],
+            octaveScrollBar: 4
+          }
+        ]
+      };
+      
+      const hexOutput = convertBeepBoxToMakeCode(testSong);
+      addResult('Basic Conversion', hexOutput.length > 0, `Generated ${hexOutput.length} hex characters`);
+      
+      // Test 2: Generate paste JSON
+      const pasteData = generatePasteJSON(testSong, 'testSong');
+      addResult('Generate Paste JSON', 
+        pasteData.version === 1 && pasteData.data.paster === 'block',
+        'Paste JSON structure is correct'
+      );
+      
+      // Test 3: Check song data
+      const songData = pasteData.data.blockState.fields.song.jres.testSong;
+      addResult('Song Data', 
+        songData.data === hexOutput && songData.mimeType === 'application/mkcd-song',
+        'Song data matches hex output and has correct MIME type'
+      );
+      
+      // Display sample output
+      const pre = document.createElement('pre');
+      pre.textContent = 'Sample Hex Output:\n' + hexOutput.substring(0, 100) + '...';
+      resultsDiv.appendChild(pre);
+      
+      const pre2 = document.createElement('pre');
+      pre2.textContent = 'Sample Paste JSON:\n' + JSON.stringify(pasteData, null, 2).substring(0, 500) + '...';
+      resultsDiv.appendChild(pre2);
+      
+    } catch (error) {
+      addResult('Conversion Test', false, error.message);
+      console.error(error);
+    }
+  </script>
+</body>
+</html>

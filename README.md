@@ -6,19 +6,24 @@ This tool will convert BeepBox music into MakeCode Arcade music.
 
 ## How to Use
 
+### Option 1: Chrome Extension (Recommended)
+
 1. Open BeepBox and create your music
 2. Save the music you create as a JSON file
-3. Drag/Drop that JSON file onto this tool
-4. You will then have the MakeCode Arcade music in your clipboard
+3. Install the Chrome extension from the `extension/` folder (see [extension/README.md](extension/README.md))
+4. Open MakeCode Arcade (https://arcade.makecode.com)
+5. Click the extension icon and drag/drop your BeepBox JSON file
+6. Press Ctrl+V (Cmd+V on Mac) in MakeCode Arcade to paste your song!
 
-Unfortunately, since MakeCode Arcade decided to use localStorage for their copy/paste routine the next steps kind of suck:
+### Option 2: Web App
 
-5. Install the chrome plugin "MakeCode Audio Import"
-6. Open MakeCode Arcade
-7. Open the chrome plugin "MakeCode Audio Import"
-8. Click "Import Audio"
-9. Paste the MakeCode Arcade music into the "Import Audio" dialog
-10. Click "Import"
+1. Open BeepBox and create your music
+2. Save the music you create as a JSON file
+3. Run this web app with `npm run dev`
+4. Drag/Drop that JSON file onto the tool
+5. Copy the generated output and manually paste it into MakeCode Arcade
+
+**Note:** MakeCode Arcade uses localStorage for their copy/paste routine instead of the system clipboard, which is why the Chrome extension is the easiest solution.
 
 ## Behind the Scenes
 
