@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "data": {
+    "paster": "block",
+    "blockState": {
+      "type": "music_song_field_editor",
+      "id": "Fk2cYzmomy^.17G5~|9A",
+      "x": 146,
+      "y": 244,
+      "disabledReasons": [
+        "ORPHANED_BLOCK",
+        "MANUALLY_DISABLED"
+      ],
+      "data": "{\"commentRefs\":[],\"fieldData\":{\"song\":\"mySongs.song1\"}}",
+      "extraState": "<mutation xmlns=\"http://www.w3.org/1999/xhtml\"></mutation>",
+      "fields": {
+        "song": {
+          "version": 1,
+          "assetType": "song",
+          "assetId": "mySongs.song1",
+          "jres": {
+            "*": {
+              "mimeType": "image/x-mkcd-f4",
+              "dataEncoding": "base64",
+              "namespace": "myImages"
+            },
+            "song1": {
+              "data": "0078000408030100001c00010a006400f40164000004000000000000000000000000000500000493000000040004050d192504000800010608000c0001080c001000010a10001400010c14001800010d18001c00010f1c002000011120002400011224002800011428002c0001162c003000011830003400011934003800011b38003c00011d3c004000011e40004400012044004800012248004c0001244c005000012550005400012754005800012958005c00012a5c006000012c",
+              "mimeType": "application/mkcd-song",
+              "displayName": "bonkers",
+              "namespace": "mySongs."
+            }
+          }
+        }
+      }
+    },
+    "typeCounts": {
+      "music_song_field_editor": 1
+    }
+  },
+  "coord": {
+    "x": 146.30121527777777,
+    "y": 244.06163194444446
+  },
+  "workspaceId": "i_)zK2+9CxNMb=!0Bmv#",
+  "targetVersion": "2.0.62",
+  "headerId": "5c9462ef-b377-4c96-27df-b06f8f77f6eb"
+}
