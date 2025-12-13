@@ -1,11 +1,10 @@
 import { useState, useCallback } from 'react'
 import './App.css'
-import { generatePasteJSON, debugNoteConversion } from './converter'
+import { generatePasteJSON } from './converter'
 
 interface ConversionResult {
   success: boolean
   data?: Record<string, unknown>
-  debug?: string
   error?: string
 }
 
@@ -35,12 +34,10 @@ function App() {
       }
 
       const pasteJSON = generatePasteJSON(beepBoxSong, songName)
-      const debug = debugNoteConversion(beepBoxSong)
       
       setResult({
         success: true,
         data: pasteJSON,
-        debug
       })
     } catch (error) {
       setResult({
@@ -149,15 +146,6 @@ function App() {
                 <div className="success-header">
                   <h2>✅ Conversion Successful!</h2>
                 </div>
-                
-                {result.debug && (
-                  <div className="debug-section">
-                    <h3>🔍 Note Conversion Debug:</h3>
-                    <pre className="debug-output">
-                      {result.debug}
-                    </pre>
-                  </div>
-                )}
                 
                 <div className="result-actions">
                   <button className="action-btn primary" onClick={copyToClipboard}>

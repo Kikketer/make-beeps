@@ -41,23 +41,6 @@ interface MakeCodeNoteEvent {
   notes: number[];
 }
 
-/**
- * Convert BeepBox pitch to MakeCode note value
- * 
- * Formula discovered from analysis:
- * encodedNote = (beepboxPitch - (octave - 2) * 12) + 1
- * 
- * For octave 4: encodedNote = beepboxPitch - 23
- * 
- * Examples:
- * - BeepBox 60 (C4) -> MakeCode 37 (0x25)
- * - BeepBox 59 (B3) -> MakeCode 36 (0x24)
- * - BeepBox 57 (A3) -> MakeCode 34 (0x22)
- */
-function beepBoxPitchToMakeCodeNote(pitch: number, octave: number): number {
-  return beepBoxPitchToMakeCodeNoteWithVersion(pitch, octave, 6);
-}
-
 function beepBoxPitchToMakeCodeNoteWithVersion(pitch: number, octave: number, beepBoxVersion: number): number {
   if (beepBoxVersion >= 9) {
     return pitch - 35;
@@ -431,41 +414,4 @@ function generateRandomId(): string {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
   return result;
-}
-
-/**
- * Debug function to show note conversions with correct formula
- */
-export function debugNoteConversion(beepBoxSong: BeepBoxSong): string {
-  const channel = beepBoxSong.channels.find(ch => ch.type === 'pitch');
-  if (!channel) return 'No pitch channels found';
-  
-  const octave = channel.octaveScrollBar || 4;
-  
-  let output = '=== BeepBox to MakeCode Note Conversion ===\n\n';
-  output += `Octave: ${octave}\n`;
-  output += `Formula: encodedNote = (beepboxPitch - (${octave} - 2) * 12) + 1\n`;
-  output += `Simplified: encodedNote = beepboxPitch - ${(octave - 2) * 12 - 1}\n`;
-  output += `Sequence: [${channel.sequence.join(', ')}]\n\n`;
-  
-  for (const patternIndex of channel.sequence) {
-    const arrayIndex = patternIndex - 1;
-    if (arrayIndex < 0 || arrayIndex >= channel.patterns.length) continue;
-    
-    const pattern = channel.patterns[arrayIndex];
-    output += `Pattern ${patternIndex} (${pattern.notes.length} notes):\n`;
-    
-    pattern.notes.forEach((note, idx) => {
-      if (note.pitches.length === 0) return;
-      
-      const makeCodeNotes = note.pitches.map(p => beepBoxPitchToMakeCodeNote(p, octave));
-      const hexNotes = makeCodeNotes.map(n => n.toString(16).padStart(2, '0'));
-      
-      output += `  Note ${idx}: BeepBox [${note.pitches.join(', ')}] -> MakeCode [${makeCodeNotes.join(', ')}] -> Hex [${hexNotes.join(', ')}]\n`;
-    });
-    
-    output += '\n';
-  }
-  
-  return output;
 }
