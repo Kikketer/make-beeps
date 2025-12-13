@@ -55,6 +55,14 @@ interface MakeCodeNoteEvent {
  * - BeepBox 57 (A3) -> MakeCode 34 (0x22)
  */
 function beepBoxPitchToMakeCodeNote(pitch: number, octave: number): number {
+  return beepBoxPitchToMakeCodeNoteWithVersion(pitch, octave, 6);
+}
+
+function beepBoxPitchToMakeCodeNoteWithVersion(pitch: number, octave: number, beepBoxVersion: number): number {
+  if (beepBoxVersion >= 9) {
+    return pitch - 35;
+  }
+
   const octaveOffset = (octave - 2) * 12;
   return (pitch - octaveOffset) + 1;
 }
@@ -84,6 +92,103 @@ function createInstrumentBytes(octave: number = 4): number[] {
   ];
 }
 
+const MAKECODE_BEATS_PER_MEASURE = 4;
+const MAKECODE_TICKS_PER_BEAT = 8;
+
+const MAKECODE_PRESET_INSTRUMENT_BYTES: Record<number, number[]> = {
+  0: [0x01, 0x0a, 0x00, 0x64, 0x00, 0xf4, 0x01, 0x64, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x04],
+  1: [0x0f, 0x05, 0x00, 0x12, 0x02, 0xc1, 0x02, 0xc2, 0x01, 0x00, 0x04, 0x05, 0x00, 0x28, 0x00, 0x00, 0x00, 0x64, 0x00, 0x28, 0x00, 0x03, 0x05, 0x00, 0x06, 0x00, 0x00, 0x04],
+  2: [0x0c, 0x96, 0x00, 0x64, 0x00, 0x6d, 0x01, 0x90, 0x01, 0x00, 0x04, 0x78, 0x00, 0x2c, 0x01, 0x00, 0x00, 0x64, 0x00, 0x32, 0x00, 0x00, 0x78, 0x00, 0x0a, 0x01, 0x00, 0x05],
+};
+
+function createInstrumentBytesFromMakeCodeParams(params: {
+  waveform: number;
+  octave: number;
+  ampEnvelope: { attack: number; decay: number; sustain: number; release: number; amplitude: number };
+  pitchEnvelope?: { attack: number; decay: number; sustain: number; release: number; amplitude: number };
+  ampLFO?: { frequency: number; amplitude: number };
+  pitchLFO?: { frequency: number; amplitude: number };
+}): number[] {
+  const out: number[] = [];
+
+  out.push(params.waveform);
+  out.push(...writeUint16LE(params.ampEnvelope.attack));
+  out.push(...writeUint16LE(params.ampEnvelope.decay));
+  out.push(...writeUint16LE(params.ampEnvelope.sustain));
+  out.push(...writeUint16LE(params.ampEnvelope.release));
+  out.push(...writeUint16LE(params.ampEnvelope.amplitude));
+
+  out.push(...writeUint16LE(params.pitchEnvelope?.attack || 0));
+  out.push(...writeUint16LE(params.pitchEnvelope?.decay || 0));
+  out.push(...writeUint16LE(params.pitchEnvelope?.sustain || 0));
+  out.push(...writeUint16LE(params.pitchEnvelope?.release || 0));
+  out.push(...writeUint16LE(params.pitchEnvelope?.amplitude || 0));
+
+  out.push(params.ampLFO?.frequency || 0);
+  out.push(...writeUint16LE(params.ampLFO?.amplitude || 0));
+  out.push(params.pitchLFO?.frequency || 0);
+  out.push(...writeUint16LE(params.pitchLFO?.amplitude || 0));
+  out.push(params.octave);
+
+  return out;
+}
+
+function getInstrumentBytesForTrack(trackId: number, fallbackOctave: number): number[] {
+  const preset = MAKECODE_PRESET_INSTRUMENT_BYTES[trackId];
+  if (preset) return preset;
+
+  const fallback = MAKECODE_PRESET_INSTRUMENT_PARAMS[trackId];
+  if (fallback) return createInstrumentBytesFromMakeCodeParams(fallback);
+
+  return createInstrumentBytes(fallbackOctave);
+}
+
+const MAKECODE_PRESET_INSTRUMENT_PARAMS: Record<number, {
+  waveform: number;
+  octave: number;
+  ampEnvelope: { attack: number; decay: number; sustain: number; release: number; amplitude: number };
+  pitchEnvelope?: { attack: number; decay: number; sustain: number; release: number; amplitude: number };
+  ampLFO?: { frequency: number; amplitude: number };
+  pitchLFO?: { frequency: number; amplitude: number };
+}> = {
+  3: {
+    waveform: 1,
+    octave: 3,
+    ampEnvelope: { attack: 220, decay: 105, sustain: 1024, release: 350, amplitude: 1024 },
+    ampLFO: { frequency: 5, amplitude: 100 },
+    pitchLFO: { frequency: 1, amplitude: 4 },
+  },
+  4: {
+    waveform: 16,
+    octave: 4,
+    ampEnvelope: { attack: 5, decay: 100, sustain: 1024, release: 30, amplitude: 1024 },
+    pitchLFO: { frequency: 10, amplitude: 4 },
+  },
+  5: {
+    waveform: 15,
+    octave: 2,
+    ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 10, amplitude: 1024 },
+  },
+  6: {
+    waveform: 1,
+    octave: 2,
+    ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 100, amplitude: 1024 },
+  },
+  7: {
+    waveform: 2,
+    octave: 3,
+    ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 100, amplitude: 1024 },
+  },
+  8: {
+    waveform: 14,
+    octave: 2,
+    ampEnvelope: { attack: 5, decay: 70, sustain: 870, release: 50, amplitude: 1024 },
+    pitchEnvelope: { attack: 10, decay: 45, sustain: 0, release: 100, amplitude: 20 },
+    ampLFO: { frequency: 1, amplitude: 50 },
+    pitchLFO: { frequency: 2, amplitude: 1 },
+  },
+};
+
 // Write 16-bit little-endian integer
 function writeUint16LE(value: number): number[] {
   return [value & 0xff, (value >> 8) & 0xff];
@@ -96,17 +201,17 @@ function writeUint16LE(value: number): number[] {
  * Convert BeepBox pattern to MakeCode note events
  * Now passes octave to the conversion function
  */
-function convertPatternToNoteEvents(pattern: BeepBoxPattern, octave: number): MakeCodeNoteEvent[] {
+function convertPatternToNoteEvents(pattern: BeepBoxPattern, octave: number, beepBoxVersion: number, tickScale: number): MakeCodeNoteEvent[] {
   const noteEvents: MakeCodeNoteEvent[] = [];
   
   for (const note of pattern.notes) {
     if (note.pitches.length === 0 || note.points.length < 2) continue;
     
-    const startTick = note.points[0].tick;
-    const endTick = note.points[note.points.length - 1].tick;
+    const startTick = note.points[0].tick * tickScale;
+    const endTick = note.points[note.points.length - 1].tick * tickScale;
     
     // Convert all pitches to MakeCode notes using correct formula
-    const makeCodeNotes = note.pitches.map(pitch => beepBoxPitchToMakeCodeNote(pitch, octave));
+    const makeCodeNotes = note.pitches.map(pitch => beepBoxPitchToMakeCodeNoteWithVersion(pitch, octave, beepBoxVersion));
     
     noteEvents.push({
       startTick,
@@ -141,13 +246,15 @@ function encodeNoteEvents(noteEvents: MakeCodeNoteEvent[]): number[] {
  * Uses correct octave handling and 16-bit notes length
  */
 function convertChannelToTrack(channel: BeepBoxChannel, beepBoxSong: BeepBoxSong, trackId: number): number[] {
-  // MakeCode typically uses octave 4, but we can use BeepBox's octaveScrollBar
-  const octave = channel.octaveScrollBar || 4;
+  const tickScale = MAKECODE_TICKS_PER_BEAT / beepBoxSong.ticksPerBeat;
+  const fallbackOctave = channel.octaveScrollBar || 4;
+  const instrumentBytes = getInstrumentBytesForTrack(trackId, fallbackOctave);
+  const octave = instrumentBytes[27] ?? fallbackOctave;
   
   // Collect all note events from all patterns in sequence
   const allNoteEvents: MakeCodeNoteEvent[] = [];
   let currentTick = 0;
-  const ticksPerBar = beepBoxSong.beatsPerBar * beepBoxSong.ticksPerBeat;
+  const ticksPerBar = beepBoxSong.beatsPerBar * beepBoxSong.ticksPerBeat * tickScale;
   
   for (const patternIndex of channel.sequence) {
     // BeepBox uses 1-based indexing for sequences, convert to 0-based
@@ -155,7 +262,7 @@ function convertChannelToTrack(channel: BeepBoxChannel, beepBoxSong: BeepBoxSong
     if (arrayIndex < 0 || arrayIndex >= channel.patterns.length) continue;
     
     const pattern = channel.patterns[arrayIndex];
-    const patternEvents = convertPatternToNoteEvents(pattern, octave);
+    const patternEvents = convertPatternToNoteEvents(pattern, octave, beepBoxSong.version, tickScale);
     
     // Offset note events by current position in song
     for (const event of patternEvents) {
@@ -174,7 +281,6 @@ function convertChannelToTrack(channel: BeepBoxChannel, beepBoxSong: BeepBoxSong
     return [];
   }
   
-  const instrumentBytes = createInstrumentBytes(octave);
   const noteEventBytes = encodeNoteEvents(allNoteEvents);
   
   const track: number[] = [];
@@ -204,15 +310,29 @@ function convertChannelToTrack(channel: BeepBoxChannel, beepBoxSong: BeepBoxSong
 export function convertBeepBoxToMakeCode(beepBoxSong: BeepBoxSong): string {
   // Build tracks from channels that have notes
   const tracks: number[][] = [];
-  let trackId = 0;
-  
-  for (const channel of beepBoxSong.channels) {
-    if (channel.type !== 'pitch') continue; // Skip drum tracks for now
-    
-    const track = convertChannelToTrack(channel, beepBoxSong, trackId);
+  let maxEndTick = 0;
+
+  for (let channelIndex = 0; channelIndex < beepBoxSong.channels.length; channelIndex++) {
+    const channel = beepBoxSong.channels[channelIndex];
+    if (channel.type !== 'pitch') continue;
+
+    const track = convertChannelToTrack(channel, beepBoxSong, channelIndex);
     if (track.length > 0) {
       tracks.push(track);
-      trackId++;
+
+      const instrumentLen = track[2] | (track[3] << 8);
+      const noteLengthOffset = 4 + instrumentLen;
+      const noteByteLength = track[noteLengthOffset] | (track[noteLengthOffset + 1] << 8);
+      const noteEventsStart = noteLengthOffset + 2;
+      const noteEventsEnd = noteEventsStart + noteByteLength;
+
+      let offset = noteEventsStart;
+      while (offset < noteEventsEnd) {
+        const endTick = track[offset + 2] | (track[offset + 3] << 8);
+        if (endTick > maxEndTick) maxEndTick = endTick;
+        const polyphony = track[offset + 4];
+        offset += 5 + polyphony;
+      }
     }
   }
   
@@ -230,14 +350,12 @@ export function convertBeepBoxToMakeCode(beepBoxSong: BeepBoxSong): string {
   // Beats per minute (16-bit LE)
   songBytes.push(...writeUint16LE(beepBoxSong.beatsPerMinute));
   
-  // Beats per measure
-  songBytes.push(beepBoxSong.beatsPerBar);
-  
-  // Ticks per beat
-  songBytes.push(beepBoxSong.ticksPerBeat);
-  
-  // Measures - use loopBars directly
-  songBytes.push(beepBoxSong.loopBars);
+  songBytes.push(MAKECODE_BEATS_PER_MEASURE);
+  songBytes.push(MAKECODE_TICKS_PER_BEAT);
+
+  const ticksPerMeasure = MAKECODE_BEATS_PER_MEASURE * MAKECODE_TICKS_PER_BEAT;
+  const computedMeasures = maxEndTick > 0 ? Math.ceil(maxEndTick / ticksPerMeasure) : 1;
+  songBytes.push(Math.max(beepBoxSong.loopBars, computedMeasures));
   
   // Number of tracks
   songBytes.push(tracks.length);
@@ -300,7 +418,7 @@ export function generatePasteJSON(beepBoxSong: BeepBoxSong, songName: string = '
       y: 244.06163194444446
     },
     workspaceId: generateRandomId(),
-    targetVersion: "2.0.62",
+    targetVersion: "2.0.63",
     headerId: generateRandomId()
   };
 }

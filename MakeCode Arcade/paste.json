@@ -7,10 +7,7 @@
       "id": "Fk2cYzmomy^.17G5~|9A",
       "x": 146,
       "y": 244,
-      "disabledReasons": [
-        "ORPHANED_BLOCK",
-        "MANUALLY_DISABLED"
-      ],
+      "disabledReasons": ["ORPHANED_BLOCK", "MANUALLY_DISABLED"],
       "data": "{\"commentRefs\":[],\"fieldData\":{\"song\":\"mySongs.song1\"}}",
       "extraState": "<mutation xmlns=\"http://www.w3.org/1999/xhtml\"></mutation>",
       "fields": {
@@ -43,6 +40,6 @@
     "y": 244.06163194444446
   },
   "workspaceId": "i_)zK2+9CxNMb=!0Bmv#",
-  "targetVersion": "2.0.62",
+  "targetVersion": "2.0.63",
   "headerId": "5c9462ef-b377-4c96-27df-b06f8f77f6eb"
 }
