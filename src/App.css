@@ -1,3 +1,13 @@
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+img {
+  width: 100%;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -31,9 +41,6 @@
   gap: 0.5rem;
 }
 
-.tv-wrap {
-}
-
 .input-section {
   padding: 2rem;
   display: flex;
@@ -63,10 +70,6 @@
   gap: 0.5rem;
 }
 
-.result-section {
-  animation: slideIn 0.3s ease;
-}
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -78,48 +81,25 @@
   }
 }
 
-.success-header h2 {
-  margin: 0 0 1.5rem 0;
-  color: #22c55e;
-}
-
-.error-message h2 {
-  margin: 0 0 1rem 0;
-  color: #ef4444;
-}
-
-.error-message p {
-  color: #666;
-}
-
-.result-actions {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.result-preview h3 {
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.json-preview {
-  background: #f5f5f5;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1rem;
-  overflow-x: auto;
-  max-height: 400px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
 .footer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  color: grey;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   padding: 2rem;
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .instructions {
@@ -142,9 +122,40 @@
   margin-bottom: 0.5rem;
 }
 
-.starter-download {
-  margin-top: 1.5rem;
-  text-align: center;
+.instructions-section {
+  padding: 2rem;
+}
+
+.instructions-section h2 {
+  margin: 0 0 2rem 0;
+  font-size: 1.75rem;
+}
+
+.step {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.step:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.step h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.25rem;
+}
+
+.step p {
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.step .nes-btn {
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {

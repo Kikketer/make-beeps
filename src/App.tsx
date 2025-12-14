@@ -1,111 +1,6 @@
-import { useState, useCallback } from 'react'
 import './App.css'
-import { generatePasteJSON } from './converter'
-
-interface ConversionResult {
-  success: boolean
-  data?: Record<string, unknown>
-  error?: string
-}
 
 function App() {
-  const [isDragging, setIsDragging] = useState(false)
-  const [result, setResult] = useState<ConversionResult | null>(null)
-  const [songName, setSongName] = useState('convertedSong')
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
-
-  const processFile = useCallback(
-    async (file: File) => {
-      try {
-        const text = await file.text()
-        const beepBoxSong = JSON.parse(text)
-
-        // Validate that it's a BeepBox song
-        if (beepBoxSong.format !== 'BeepBox') {
-          throw new Error('Invalid file: Not a BeepBox song format')
-        }
-
-        const pasteJSON = generatePasteJSON(beepBoxSong, songName)
-
-        setResult({
-          success: true,
-          data: pasteJSON,
-        })
-      } catch (error) {
-        setResult({
-          success: false,
-          error:
-            error instanceof Error ? error.message : 'Unknown error occurred',
-        })
-      }
-    },
-    [songName],
-  )
-
-  const handleDrop = useCallback(
-    async (e: React.DragEvent) => {
-      e.preventDefault()
-      setIsDragging(false)
-
-      const files = Array.from(e.dataTransfer.files)
-      const jsonFile = files.find((f) => f.name.endsWith('.json'))
-
-      if (!jsonFile) {
-        setResult({
-          success: false,
-          error: 'Please drop a JSON file',
-        })
-        return
-      }
-
-      await processFile(jsonFile)
-    },
-    [processFile],
-  )
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      await processFile(file)
-    }
-  }
-
-  const copyToClipboard = async () => {
-    if (result?.data) {
-      try {
-        await navigator.clipboard.writeText(
-          JSON.stringify(result.data, null, 2),
-        )
-        alert('Copied to clipboard!')
-      } catch {
-        alert('Failed to copy to clipboard')
-      }
-    }
-  }
-
-  const downloadJSON = () => {
-    if (result?.data) {
-      const blob = new Blob([JSON.stringify(result.data, null, 2)], {
-        type: 'application/json',
-      })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'makecode-paste.json'
-      a.click()
-      URL.revokeObjectURL(url)
-    }
-  }
-
   return (
     <div className="app">
       <header className="header">
@@ -113,102 +8,138 @@ function App() {
         <p className="subtitle">
           Convert BeepBox music to MakeCode Arcade format
         </p>
-        <div className="starter-download">
-          <a
-            href="https://www.beepbox.co/#9n90sbk0l00e02t1Ua7g02j07r1i0o533333333T1v1u40f0qww10r51d08A4F2B6Q0068Pf624E2b676T1v1ub7f0q0w10p7d23A5F4B9Q0001Pffa7E4b862363379T1v1u19f0q802d23A5F4B0Q0202PeebbE0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u18f0q00d23A0F0B0Q0000Pf600E1617T5v1ua0f60m92hc1ea2k02f30req83431d37H_QiBy9asq99900h0E0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u56f0qww10p71d03A5F5B9Q0001PfaedE4b762663777T7v1u70f40p61770q72f5q0E21990l65d06HT-SRJJJJIAAAAAh0IaE1c11b4z4z4z4z4z4z4z4z4zp28kFEZFg410g410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te0"
-            className="nes-btn is-warning"
-            target="_blank"
-          >
-            Download Starter BeepBox Project
-          </a>
-        </div>
       </header>
 
       <main className="main">
         <div className="tv-wrap nes-container is-dark">
-          <div className="input-section">
-            <div className="nes-field is-dark">
-              <label htmlFor="songName" className="nes-label">
-                Song Name:
-              </label>
-              <input
-                id="songName"
-                type="text"
-                value={songName}
-                onChange={(e) => setSongName(e.target.value)}
-                placeholder="Enter song name"
-                className="nes-input"
+          <section className="instructions-section">
+            <h2>Getting Started</h2>
+
+            <div className="step">
+              <h3>Step 1: Get the Chrome Extension</h3>
+              <p>
+                Install the MakeCode Audio Import extension to enable importing
+                BeepBox music directly into MakeCode Arcade.
+              </p>
+              <a
+                href="https://chromewebstore.google.com/detail/makecode-audio-import/YOUR_EXTENSION_ID"
+                className="nes-btn is-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Get Chrome Extension
+              </a>
+            </div>
+
+            <div className="step">
+              <h3>Step 2: Download Tuned Instruments</h3>
+              <p>
+                Download the tuned instruments JSON file and import it into
+                BeepBox. This gives you instruments that are pre-configured to
+                match MakeCode Arcade's sound capabilities.
+              </p>
+              <a
+                href="/tuned-instruments.json"
+                download="tuned-instruments.json"
+                className="nes-btn is-warning"
+              >
+                Download Tuned Instruments
+              </a>
+              <img
+                src="import-beep.gif"
+                alt="Import BeepBox"
+                aria-description="Showing the process of opening a BeepBox json file in BeepBox. The user is clicking the file -> open dialog and selecting the correct json file downloaded from earlier steps."
               />
             </div>
 
-            <div
-              className={`drop-zone ${isDragging ? 'dragging' : ''} nes-container is-dark`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <div className="drop-zone-content">
-                <p className="drop-text">
-                  Drag & Drop your BeepBox JSON file here
-                </p>
-                <p className="drop-or">or</p>
-                <label htmlFor="file-input" className="nes-btn">
-                  Choose File
-                </label>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileSelect}
-                  style={{ display: 'none' }}
-                />
-              </div>
+            <div className="step">
+              <h3>Step 3: Create Your Music</h3>
+              <p>
+                Open BeepBox and import the tuned instruments, then compose your
+                music using the pre-configured instruments.
+              </p>
+              <p>
+                Note: Stay within the range of notes that are in the template.
+                MakeCode MAY be able to play notes outside that range but it's
+                not fully supported.
+              </p>
+              <a
+                href="https://www.beepbox.co/"
+                className="nes-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open BeepBox
+              </a>
             </div>
-          </div>
 
-          {result && (
-            <div className="result-section">
-              {result.success ? (
-                <>
-                  <div className="success-header">
-                    <h2>Conversion Successful!</h2>
-                  </div>
-
-                  <div className="result-actions">
-                    <button className="nes-btn" onClick={copyToClipboard}>
-                      Copy to Clipboard
-                    </button>
-                    <button className="nes-btn" onClick={downloadJSON}>
-                      Download JSON
-                    </button>
-                  </div>
-                  <div className="result-preview">
-                    <h3>Full JSON Preview:</h3>
-                    <pre className="json-preview">
-                      {JSON.stringify(result.data, null, 2)}
-                    </pre>
-                  </div>
-                </>
-              ) : (
-                <div className="error-message">
-                  <h2>Conversion Failed</h2>
-                  <p>{result.error}</p>
-                </div>
-              )}
+            <div className="step">
+              <h3>Step 4: Import to MakeCode</h3>
+              <p>
+                With the Chrome extension installed, open your MakeCode Arcade
+                project. Open the extension and add your BeepBox song JSON file.
+                Then paste into the block code screen on MakeCode Arcade and
+                you'll have your song!
+              </p>
+              <img
+                src="copy-makecode.gif"
+                alt="Copy MakeCode"
+                aria-description="Showing the process of selecting the BeepBox JSON file into the chrome extension then pasting in MakeCode Block editor."
+              />
             </div>
-          )}
+          </section>
         </div>
+
+        <section className="nes-container with-title">
+          <h2>Why</h2>
+          <p>
+            This project started as a "why can't I get sharps and flats in
+            MakeCode Arcade" question. From there I started reverse engineering
+            the MakeCode Arcade music format, thank you MakeCode team for making
+            this whole thing open source!
+          </p>
+          <p>
+            After I understood that sharps and flats could be played in MakeCode
+            I decided to take it one step further. The music editor in MakeCode
+            Arcade is a bit difficult to use to make some real repeating and
+            dynamic songs. BeepBox is commonly used by students to create some
+            really cool music, so I thought to combine the two.
+          </p>
+          <p>
+            The result is this sorta patch-work combination of using BeepBox to
+            create your music but then able to import them into MakeCode Arcade
+            using mostly unmodified aspects of each.
+          </p>
+        </section>
       </main>
 
       <footer className="footer">
-        <h3>How to Use:</h3>
-        <ol>
-          <li>Open BeepBox and create your music</li>
-          <li>Save the music as a JSON file</li>
-          <li>Drag/Drop that JSON file onto this tool</li>
-          <li>Copy the converted MakeCode Arcade music</li>
-          <li>Use the MakeCode Audio Import Chrome extension to import it</li>
-        </ol>
+        <p>
+          MakeCode Arcade is a fantastic application for learning video game
+          creation, please go check it out and give Microsoft a high five for
+          funding and supporting such a great tool.
+        </p>
+        <p>
+          This tool is not at all associated to Microsoft or MakeCode team
+          directly.
+        </p>
+        <p>
+          This tool was mostly vibe-coded over a few weeks, using AI tools to
+          understand and reverse-engineer the sound creating code in MakeCode
+          Arcade. Then set forth to translate the output of BeepBox into
+          MakeCode Arcade music along with understanding the copy/paste format
+          MakeCode Arcade uses.
+        </p>
+        <div className="footer-actions">
+          <a
+            href="https://github.com/kikketer/make-beeps"
+            className="nes-btn is-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        </div>
       </footer>
     </div>
   )
