@@ -1,30 +1,11 @@
 # MakeCode Arcade Audio Converter
 
-Wouldn't you like the power and flexibility of BeepBox but have that produce MakeCode Arcade music?
+Visit the site at [https://cjweed.com/make-beeps](https://cjweed.com/make-beeps) to use the tool.
 
-This tool will convert BeepBox music into MakeCode Arcade music.
+## Technical Details
 
-## How to Use
+Please don't use this as an evaluation of what I can do, this was done as a side/fun project with my son. Mostly as a test to see if AI could accurately reverse-engineer something well enough to build upon it.
 
-### Option 1: Chrome Extension (Recommended)
+The results are mostly good, I was able to ignore most of the highly technical details of MakeCode Arcade and focus on the end game result. This is likely our future, where the code is nearly trash but as long as we can ask AI how it works and have it fix it, this is what we will live with.
 
-1. Open BeepBox and create your music
-2. Save the music you create as a JSON file
-3. Install the Chrome extension from the `extension/` folder (see [extension/README.md](extension/README.md))
-4. Open MakeCode Arcade (https://arcade.makecode.com)
-5. Click the extension icon and drag/drop your BeepBox JSON file
-6. Press Ctrl+V (Cmd+V on Mac) in MakeCode Arcade to paste your song!
-
-### Option 2: Web App
-
-1. Open BeepBox and create your music
-2. Save the music you create as a JSON file
-3. Run this web app with `npm run dev`
-4. Drag/Drop that JSON file onto the tool
-5. Copy the generated output and manually paste it into MakeCode Arcade
-
-**Note:** MakeCode Arcade uses localStorage for their copy/paste routine instead of the system clipboard, which is why the Chrome extension is the easiest solution.
-
-## Behind the Scenes
-
-The JSON file produced from BeepBox
+If you are in here digging around in the code you are doing the wrong thing. Simply ask AI what this code does and have it do the work for you. The "architecture" is our future as software engineers. The "grand vision" of the architecture is what you should be focusing on to succeed in this new world.
