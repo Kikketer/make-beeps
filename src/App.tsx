@@ -113,6 +113,15 @@ function App() {
         <p className="subtitle">
           Convert BeepBox music to MakeCode Arcade format
         </p>
+        <div className="starter-download">
+          <a
+            href="https://www.beepbox.co/#9n90sbk0l00e02t1Ua7g02j07r1i0o533333333T1v1u40f0qww10r51d08A4F2B6Q0068Pf624E2b676T1v1ub7f0q0w10p7d23A5F4B9Q0001Pffa7E4b862363379T1v1u19f0q802d23A5F4B0Q0202PeebbE0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u18f0q00d23A0F0B0Q0000Pf600E1617T5v1ua0f60m92hc1ea2k02f30req83431d37H_QiBy9asq99900h0E0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u56f0qww10p71d03A5F5B9Q0001PfaedE4b762663777T7v1u70f40p61770q72f5q0E21990l65d06HT-SRJJJJIAAAAAh0IaE1c11b4z4z4z4z4z4z4z4z4zp28kFEZFg410g410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te0"
+            className="nes-btn is-warning"
+            target="_blank"
+          >
+            Download Starter BeepBox Project
+          </a>
+        </div>
       </header>
 
       <main className="main">
@@ -200,15 +209,6 @@ function App() {
           <li>Copy the converted MakeCode Arcade music</li>
           <li>Use the MakeCode Audio Import Chrome extension to import it</li>
         </ol>
-        <div className="starter-download">
-          <a
-            href="https://www.beepbox.co/#9n90sbk0l00e02t1Ua7g02j07r1i0o533333333T1v1u40f0qww10r51d08A4F2B6Q0068Pf624E2b676T1v1ub7f0q0w10p7d23A5F4B9Q0001Pffa7E4b862363379T1v1u19f0q802d23A5F4B0Q0202PeebbE0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u18f0q00d23A0F0B0Q0000Pf600E1617T5v1ua0f60m92hc1ea2k02f30req83431d37H_QiBy9asq99900h0E0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u56f0qww10p71d03A5F5B9Q0001PfaedE4b762663777T7v1u70f40p61770q72f5q0E21990l65d06HT-SRJJJJIAAAAAh0IaE1c11b4z4z4z4z4z4z4z4z4zp28kFEZFg410g410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te0"
-            className="nes-btn is-warning"
-            target="_blank"
-          >
-            Download Starter BeepBox Project
-          </a>
-        </div>
       </footer>
     </div>
   )
