@@ -2,26 +2,22 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .header {
   text-align: center;
   padding: 2rem 1rem;
-  color: white;
 }
 
 .header h1 {
   margin: 0;
   font-size: 2.5rem;
   font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .subtitle {
   margin: 0.5rem 0 0 0;
   font-size: 1.1rem;
-  opacity: 0.9;
 }
 
 .main {
@@ -29,100 +25,45 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding: 0 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tv-wrap {
 }
 
 .input-section {
-  background: white;
-  border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  margin-bottom: 2rem;
-}
-
-.song-name-input {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .song-name-input label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-}
-
-.song-name-input input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.song-name-input input:focus {
-  outline: none;
-  border-color: #667eea;
 }
 
 .drop-zone {
-  border: 3px dashed #d0d0d0;
-  border-radius: 12px;
   padding: 3rem 2rem;
   text-align: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  background: #fafafa;
 }
 
 .drop-zone:hover,
 .drop-zone.dragging {
-  border-color: #667eea;
-  background: #f0f4ff;
-  transform: scale(1.02);
+  background-color: #667eea;
 }
 
 .drop-zone-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-}
-
-.drop-icon {
-  font-size: 4rem;
-}
-
-.drop-text {
-  font-size: 1.2rem;
-  color: #333;
-  margin: 0;
-}
-
-.drop-or {
-  color: #999;
-  margin: 0.5rem 0;
-}
-
-.file-input-label {
-  padding: 0.75rem 2rem;
-  background: #667eea;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s;
-}
-
-.file-input-label:hover {
-  background: #5568d3;
+  gap: 0.5rem;
 }
 
 .result-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   animation: slideIn 0.3s ease;
 }
 
@@ -158,63 +99,6 @@
   flex-wrap: wrap;
 }
 
-.action-btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.action-btn.primary {
-  background: #667eea;
-  color: white;
-}
-
-.action-btn.primary:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.action-btn.secondary {
-  background: #10b981;
-  color: white;
-}
-
-.action-btn.secondary:hover {
-  background: #059669;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-
-.debug-section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: #f0f9ff;
-  border: 2px solid #3b82f6;
-  border-radius: 8px;
-}
-
-.debug-section h3 {
-  margin: 0 0 1rem 0;
-  color: #1e40af;
-}
-
-.debug-output {
-  background: #1e293b;
-  color: #10b981;
-  border-radius: 6px;
-  padding: 1rem;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  max-height: 300px;
-}
-
 .result-preview h3 {
   margin: 0 0 1rem 0;
   color: #333;
@@ -241,7 +125,6 @@
 .instructions {
   max-width: 800px;
   margin: 0 auto;
-  color: white;
 }
 
 .instructions h3 {
@@ -259,7 +142,16 @@
   margin-bottom: 0.5rem;
 }
 
+.starter-download {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
+  .main {
+    padding: 0.5rem;
+  }
+
   .header h1 {
     font-size: 2rem;
   }
@@ -275,9 +167,5 @@
 
   .result-actions {
     flex-direction: column;
-  }
-
-  .action-btn {
-    width: 100%;
   }
 }

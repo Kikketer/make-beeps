@@ -1,158 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BeepBox to MakeCode Converter</title>
-  <style>
-    body {
-      width: 400px;
-      padding: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      margin: 0;
-    }
-    
-    h1 {
-      font-size: 18px;
-      margin: 0 0 16px 0;
-      color: #333;
-    }
-    
-    .status {
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-    
-    .status.info {
-      background-color: #e3f2fd;
-      color: #1565c0;
-      border: 1px solid #90caf9;
-    }
-    
-    .status.success {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-      border: 1px solid #81c784;
-    }
-    
-    .status.error {
-      background-color: #ffebee;
-      color: #c62828;
-      border: 1px solid #ef5350;
-    }
-    
-    .status.warning {
-      background-color: #fff3e0;
-      color: #e65100;
-      border: 1px solid #ffb74d;
-    }
-    
-    .drop-zone {
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      padding: 40px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background-color: #fafafa;
-    }
-    
-    .drop-zone:hover {
-      border-color: #2196f3;
-      background-color: #f5f5f5;
-    }
-    
-    .drop-zone.drag-over {
-      border-color: #2196f3;
-      background-color: #e3f2fd;
-    }
-    
-    .drop-zone-text {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    
-    .drop-zone-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-    
-    .button {
-      background-color: #2196f3;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.2s;
-    }
-    
-    .button:hover {
-      background-color: #1976d2;
-    }
-    
-    .button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-    
-    input[type="file"] {
-      display: none;
-    }
-    
-    .song-name-input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-      margin-bottom: 16px;
-      box-sizing: border-box;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: #555;
-      font-weight: 500;
-    }
-  </style>
-</head>
-<body>
-  <h1>🎵 BeepBox to MakeCode Arcade</h1>
-  
-  <div id="status" class="status info">
-    Open this extension while on arcade.makecode.com
-  </div>
-  
-  <div>
-    <label for="songName">Song Name:</label>
-    <input 
-      type="text" 
-      id="songName" 
-      class="song-name-input" 
-      placeholder="mySong" 
-      value="convertedSong"
-    />
-  </div>
-  
-  <div id="dropZone" class="drop-zone">
-    <div class="drop-zone-icon">📁</div>
-    <div class="drop-zone-text">
-      Drag & drop your BeepBox JSON file here<br>
-      or click to browse
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeepBox to MakeCode Converter</title>
+    <link href="nes.min.css" rel="stylesheet" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Tiny5&display=swap');
+
+      body {
+        width: 450px;
+        padding: 1rem;
+        font-family: 'Tiny5', sans-serif;
+        margin: 0;
+        background-color: #212529; /* Dark background to match NES dark theme */
+      }
+
+      h1 {
+        font-family: 'Pixelify Sans', sans-serif;
+        font-size: 1.2rem;
+        margin: 0 0 1rem 0;
+        text-align: center;
+        color: #fff;
+      }
+
+      .status {
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .status.info {
+        color: #fff;
+      }
+
+      .status.success {
+        color: #92cc41;
+      }
+
+      .status.error {
+        color: #e76e55;
+      }
+
+      .status.warning {
+        color: #f7d51d;
+      }
+
+      .drop-zone {
+        margin-top: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        background-color: #212529;
+      }
+
+      .drop-zone.drag-over {
+        background-color: #3e4349;
+        border-color: #fff;
+      }
+
+      .drop-zone-text {
+        color: #fff;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      .drop-zone-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      input[type='file'] {
+        display: none;
+      }
+
+      .input-group {
+        margin-bottom: 1rem;
+      }
+
+      .nes-container {
+        padding: 1rem !important;
+      }
+
+      .nes-field {
+        margin-bottom: 1rem;
+      }
+
+      .footer-note {
+        text-align: center;
+        color: #666;
+        margin-top: 1rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nes-container is-dark with-title">
+      <p class="title">Make Beep</p>
+
+      <div id="status" style="text-align: center; padding: 0.5rem">
+        <p style="margin: 0">
+          Open this extension while on arcade.makecode.com
+        </p>
+      </div>
+
+      <div class="nes-field is-dark">
+        <label for="songName">Song Name:</label>
+        <input
+          type="text"
+          id="songName"
+          class="nes-input is-dark"
+          placeholder="mySong"
+          value="convertedSong"
+        />
+      </div>
+
+      <div id="dropZone" class="nes-container is-dark is-rounded drop-zone">
+        <div class="drop-zone-content">
+          <p class="drop-zone-text">Drag & drop your BeepBox JSON file here</p>
+          <p style="margin: 0.5rem 0; font-size: 0.8rem">or</p>
+          <button class="nes-btn is-primary">Select File</button>
+        </div>
+      </div>
+
+      <input type="file" id="fileInput" accept=".json,application/json" />
+
+      <div class="footer-note">
+        <a
+          href="https://www.beepbox.co/#9n90sbk0l00e02t1Ua7g02j07r1i0o533333333T1v1u40f0qww10r51d08A4F2B6Q0068Pf624E2b676T1v1ub7f0q0w10p7d23A5F4B9Q0001Pffa7E4b862363379T1v1u19f0q802d23A5F4B0Q0202PeebbE0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u18f0q00d23A0F0B0Q0000Pf600E1617T5v1ua0f60m92hc1ea2k02f30req83431d37H_QiBy9asq99900h0E0T5v1u85f10l7q00d23HK-LBJrttAAAyqhh0E0T1v1u56f0qww10p71d03A5F5B9Q0001PfaedE4b762663777T7v1u70f40p61770q72f5q0E21990l65d06HT-SRJJJJIAAAAAh0IaE1c11b4z4z4z4z4z4z4z4z4zp28kFEZFg410g410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te2CzMQ10mg410g410g410g410o10g410g410g410g410g41w410g410g40te0"
+          class="nes-btn is-warning"
+          target="_blank"
+        >
+          Download Starter BeepBox Project
+        </a>
+      </div>
     </div>
-    <button class="button">Select File</button>
-  </div>
-  
-  <input type="file" id="fileInput" accept=".json,application/json">
-  
-  <script src="converter.js"></script>
-  <script src="popup.js"></script>
-</body>
+
+    <script src="converter.js"></script>
+    <script src="popup.js"></script>
+  </body>
 </html>

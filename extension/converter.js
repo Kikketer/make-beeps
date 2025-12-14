@@ -58,9 +58,96 @@
   var MAKECODE_BEATS_PER_MEASURE = 4;
   var MAKECODE_TICKS_PER_BEAT = 8;
   var MAKECODE_PRESET_INSTRUMENT_BYTES = {
-    0: [1, 10, 0, 100, 0, 244, 1, 100, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 4],
-    1: [15, 5, 0, 18, 2, 193, 2, 194, 1, 0, 4, 5, 0, 40, 0, 0, 0, 100, 0, 40, 0, 3, 5, 0, 6, 0, 0, 4],
-    2: [12, 150, 0, 100, 0, 109, 1, 144, 1, 0, 4, 120, 0, 44, 1, 0, 0, 100, 0, 50, 0, 0, 120, 0, 10, 1, 0, 5]
+    0: [
+      1,
+      10,
+      0,
+      100,
+      0,
+      244,
+      1,
+      100,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      0,
+      0,
+      4
+    ],
+    1: [
+      15,
+      5,
+      0,
+      18,
+      2,
+      193,
+      2,
+      194,
+      1,
+      0,
+      4,
+      5,
+      0,
+      40,
+      0,
+      0,
+      0,
+      100,
+      0,
+      40,
+      0,
+      3,
+      5,
+      0,
+      6,
+      0,
+      0,
+      4
+    ],
+    2: [
+      12,
+      150,
+      0,
+      100,
+      0,
+      109,
+      1,
+      144,
+      1,
+      0,
+      4,
+      120,
+      0,
+      44,
+      1,
+      0,
+      0,
+      100,
+      0,
+      50,
+      0,
+      0,
+      120,
+      0,
+      10,
+      1,
+      0,
+      5
+    ]
   };
   function createInstrumentBytesFromMakeCodeParams(params) {
     const out = [];
@@ -93,36 +180,78 @@
     3: {
       waveform: 1,
       octave: 3,
-      ampEnvelope: { attack: 220, decay: 105, sustain: 1024, release: 350, amplitude: 1024 },
+      ampEnvelope: {
+        attack: 220,
+        decay: 105,
+        sustain: 1024,
+        release: 350,
+        amplitude: 1024
+      },
       ampLFO: { frequency: 5, amplitude: 100 },
       pitchLFO: { frequency: 1, amplitude: 4 }
     },
     4: {
       waveform: 16,
       octave: 4,
-      ampEnvelope: { attack: 5, decay: 100, sustain: 1024, release: 30, amplitude: 1024 },
+      ampEnvelope: {
+        attack: 5,
+        decay: 100,
+        sustain: 1024,
+        release: 30,
+        amplitude: 1024
+      },
       pitchLFO: { frequency: 10, amplitude: 4 }
     },
     5: {
       waveform: 15,
       octave: 2,
-      ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 10, amplitude: 1024 }
+      ampEnvelope: {
+        attack: 10,
+        decay: 100,
+        sustain: 500,
+        release: 10,
+        amplitude: 1024
+      }
     },
     6: {
       waveform: 1,
       octave: 2,
-      ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 100, amplitude: 1024 }
+      ampEnvelope: {
+        attack: 10,
+        decay: 100,
+        sustain: 500,
+        release: 100,
+        amplitude: 1024
+      }
     },
     7: {
       waveform: 2,
       octave: 3,
-      ampEnvelope: { attack: 10, decay: 100, sustain: 500, release: 100, amplitude: 1024 }
+      ampEnvelope: {
+        attack: 10,
+        decay: 100,
+        sustain: 500,
+        release: 100,
+        amplitude: 1024
+      }
     },
     8: {
       waveform: 14,
       octave: 2,
-      ampEnvelope: { attack: 5, decay: 70, sustain: 870, release: 50, amplitude: 1024 },
-      pitchEnvelope: { attack: 10, decay: 45, sustain: 0, release: 100, amplitude: 20 },
+      ampEnvelope: {
+        attack: 5,
+        decay: 70,
+        sustain: 870,
+        release: 50,
+        amplitude: 1024
+      },
+      pitchEnvelope: {
+        attack: 10,
+        decay: 45,
+        sustain: 0,
+        release: 100,
+        amplitude: 20
+      },
       ampLFO: { frequency: 1, amplitude: 50 },
       pitchLFO: { frequency: 2, amplitude: 1 }
     }
@@ -136,7 +265,9 @@
       if (note.pitches.length === 0 || note.points.length < 2) continue;
       const startTick = note.points[0].tick * tickScale;
       const endTick = note.points[note.points.length - 1].tick * tickScale;
-      const makeCodeNotes = note.pitches.map((pitch) => beepBoxPitchToMakeCodeNoteWithVersion(pitch, octave, beepBoxVersion));
+      const makeCodeNotes = note.pitches.map(
+        (pitch) => beepBoxPitchToMakeCodeNoteWithVersion(pitch, octave, beepBoxVersion)
+      );
       noteEvents.push({
         startTick,
         endTick,
@@ -167,7 +298,12 @@
       const arrayIndex = patternIndex - 1;
       if (arrayIndex < 0 || arrayIndex >= channel.patterns.length) continue;
       const pattern = channel.patterns[arrayIndex];
-      const patternEvents = convertPatternToNoteEvents(pattern, octave, beepBoxSong.version, tickScale);
+      const patternEvents = convertPatternToNoteEvents(
+        pattern,
+        octave,
+        beepBoxSong.version,
+        tickScale
+      );
       for (const event of patternEvents) {
         allNoteEvents.push({
           startTick: event.startTick + currentTick,
@@ -231,6 +367,7 @@
     return songBytes.map((b) => b.toString(16).padStart(2, "0")).join("");
   }
   function generatePasteJSON(beepBoxSong, songName = "convertedSong") {
+    const smushedSongName = songName.replace(/[^a-zA-Z]/g, "-");
     const hexData = convertBeepBoxToMakeCode(beepBoxSong);
     return {
       version: 1,
@@ -241,24 +378,21 @@
           id: generateRandomId(),
           x: 146,
           y: 244,
-          disabledReasons: [
-            "ORPHANED_BLOCK",
-            "MANUALLY_DISABLED"
-          ],
-          data: `{"commentRefs":[],"fieldData":{"song":"mySongs.${songName}"}}`,
+          disabledReasons: ["ORPHANED_BLOCK", "MANUALLY_DISABLED"],
+          data: `{"commentRefs":[],"fieldData":{"song":"mySongs.${smushedSongName}"}}`,
           extraState: '<mutation xmlns="http://www.w3.org/1999/xhtml"></mutation>',
           fields: {
             song: {
               version: 1,
               assetType: "song",
-              assetId: `mySongs.${songName}`,
+              assetId: `mySongs.${smushedSongName}`,
               jres: {
                 "*": {
                   mimeType: "image/x-mkcd-f4",
                   dataEncoding: "base64",
                   namespace: "myImages"
                 },
-                [songName]: {
+                [smushedSongName]: {
                   data: hexData,
                   mimeType: "application/mkcd-song",
                   displayName: songName,
@@ -273,8 +407,8 @@
         }
       },
       coord: {
-        x: 146.30121527777777,
-        y: 244.06163194444446
+        x: 146,
+        y: 244
       },
       workspaceId: generateRandomId(),
       targetVersion: "2.0.63",

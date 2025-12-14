@@ -55,6 +55,7 @@ extension/
 ├── popup.js           # Popup logic and file handling
 ├── content.js         # Content script for localStorage access
 ├── converter.js       # BeepBox to MakeCode conversion logic
+├── nes.min.css        # NES.css styling
 ├── icon16.png         # Extension icon (16x16)
 ├── icon48.png         # Extension icon (48x48)
 └── icon128.png        # Extension icon (128x128)
@@ -71,14 +72,17 @@ The extension requires the following permissions:
 ## Troubleshooting
 
 ### "Please open this extension while on arcade.makecode.com"
+
 - Make sure you're on the correct domain before opening the extension
 - The extension only works on https://arcade.makecode.com/*
 
 ### "Invalid BeepBox JSON format"
+
 - Ensure your file is a valid BeepBox JSON export
 - Check that the file contains `channels` and `beatsPerBar` properties
 
 ### Song doesn't paste
+
 - Make sure you see the success message before attempting to paste
 - Try clicking in the MakeCode Arcade workspace before pasting
 - Refresh the MakeCode Arcade page and try again
