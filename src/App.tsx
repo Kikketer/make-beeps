@@ -22,7 +22,7 @@ function App() {
                 BeepBox music directly into MakeCode Arcade.
               </p>
               <a
-                href="https://chromewebstore.google.com/detail/makecode-audio-import/YOUR_EXTENSION_ID"
+                href="https://chromewebstore.google.com/detail/makebeeps/kcihdejijhocbjplmnllcomblcpcbchj"
                 className="nes-btn is-primary"
                 target="_blank"
                 rel="noopener noreferrer"
