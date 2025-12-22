@@ -39,7 +39,7 @@ function App() {
                 match MakeCode Arcade's sound capabilities.
               </p>
               <a
-                href="/tuned-instruments.json"
+                href="tuned-instruments.json"
                 download="tuned-instruments.json"
                 className="nes-btn is-warning"
               >
